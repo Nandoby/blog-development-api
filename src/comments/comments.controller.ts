@@ -1,29 +1,31 @@
 import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {CommentsService} from "./comments.service";
 
 @Controller('comments')
 export class CommentsController {
+  constructor(private commentService: CommentsService) { }
   @Get()
   findAll() {
-    return 'This action returns all comments';
+    return this.commentService.findAll();
   }
 
   @Post()
   create() {
-    return 'This action adds a new comments';
+    return this.commentService.create();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return `This action returns a comments with id ${id}`;
+    return this.commentService.findOne(id);
   }
 
   @Put(':id')
   update(@Param('id') id: string) {
-    return `This action updates a #${id} comments`;
+    return this.commentService.update(id);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return `This action removes a #${id}`;
+    return this.commentService.remove(id);
   }
 }

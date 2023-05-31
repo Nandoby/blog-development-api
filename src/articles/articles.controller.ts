@@ -1,29 +1,32 @@
 import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { ArticlesService } from './articles.service';
 
 @Controller('articles')
 export class ArticlesController {
+  constructor(private articlesService: ArticlesService) {}
+
   @Get()
   findAll() {
-    return 'This action returns all article';
+    return this.articlesService.findAll();
   }
 
   @Post()
   create() {
-    return 'This action adds a new article';
+    return this.articlesService.create();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return `This action returns a article with id ${id}`;
+    return this.articlesService.findOne(id);
   }
 
   @Put(':id')
   update(@Param('id') id: string) {
-    return `This action updates a #${id} article`;
+    return this.articlesService.update(id);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return `This action removes a #${id}`;
+    return this.articlesService.remove(id);
   }
 }

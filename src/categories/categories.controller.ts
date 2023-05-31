@@ -1,29 +1,32 @@
 import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { CategoriesService } from './categories.service';
 
 @Controller('categories')
 export class CategoriesController {
+  constructor(private categorieService: CategoriesService) {}
+
   @Get()
   findAll() {
-    return 'This action returns all categorie';
+    return this.categorieService.findAll();
   }
 
   @Post()
   create() {
-    return 'This action adds a new categorie';
+    return this.categorieService.create();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return `This action returns a categorie with id ${id}`;
+    return this.categorieService.findOne(id);
   }
 
   @Put(':id')
   update(@Param('id') id: string) {
-    return `This action updates a #${id} categorie`;
+    return this.categorieService.update(id);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return `This action removes a #${id}`;
+    return this.categorieService.remove(id);
   }
 }

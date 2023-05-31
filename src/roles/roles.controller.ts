@@ -1,29 +1,32 @@
 import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { RolesService } from './roles.service';
 
 @Controller('roles')
 export class RolesController {
+  constructor(private roleService: RolesService) {}
+
   @Get()
   findAll() {
-    return 'This action returns all roles';
+    return this.roleService.findAll();
   }
 
   @Post()
   create() {
-    return 'This action adds a new role';
+    return this.roleService.create();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return `This action returns a role with id ${id}`;
+    return this.roleService.findOne(id);
   }
 
   @Put(':id')
   update(@Param('id') id: string) {
-    return `This action updates a #${id} role`;
+    return this.roleService.update(id);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return `This action removes a #${id}`;
+    return this.roleService.remove(id);
   }
 }
