@@ -15,10 +15,10 @@ export class CommentsService {
   }
 
   update(id) {
-    return `This action updates an comments`;
+    return `This action updates a comments #${id}`;
   }
 
   remove(id) {
-    return `This action removes an comments`;
+    return `This action removes a comments #${id}`;
   }
 }

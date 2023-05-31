@@ -15,10 +15,10 @@ export class CategoriesService {
   }
 
   update(id) {
-    return `This action updates an categorie`;
+    return `This action updates a categorie #${id}`;
   }
 
   remove(id) {
-    return `This action removes an categorie`;
+    return `This action removes a categorie #${id}`;
   }
 }
