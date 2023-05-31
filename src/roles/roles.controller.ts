@@ -1,25 +1,25 @@
 import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 
-@Controller('users')
-export class UsersController {
+@Controller('roles')
+export class RolesController {
   @Get()
   findAll() {
-    return 'This action returns all user';
+    return 'This action returns all roles';
   }
 
   @Post()
   create() {
-    return 'This action adds a new user';
+    return 'This action adds a new role';
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return `This action returns a user with id ${id}`;
+    return `This action returns a role with id ${id}`;
   }
 
   @Put(':id')
   update(@Param('id') id: string) {
-    return `This action updates a #${id} user`;
+    return `This action updates a #${id} role`;
   }
 
   @Delete(':id')
