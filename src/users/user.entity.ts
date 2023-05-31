@@ -1,7 +1,6 @@
 import {
   Column,
   Entity,
-  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -25,6 +24,9 @@ export class User {
 
   @Column({ default: 'default.png' })
   picture: string;
+
+  @Column()
+  password: string;
 
   @OneToMany(() => Article, (article: Article) => article.user)
   articles: Article[];
