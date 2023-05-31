@@ -15,10 +15,10 @@ export class ArticlesService {
   }
 
   update(id) {
-    return `This action updates an article`;
+    return `This action updates a article #${id}`;
   }
 
   remove(id) {
-    return `This action removes an article`;
+    return `This action removes a article #${id}`;
   }
 }

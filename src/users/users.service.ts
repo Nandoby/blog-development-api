@@ -15,10 +15,10 @@ export class UsersService {
   }
 
   update(id) {
-    return `This action updates an users`;
+    return `This action updates a users #${id}`;
   }
 
   remove(id) {
-    return `This action removes an users`;
+    return `This action removes a users #${id}`;
   }
 }
