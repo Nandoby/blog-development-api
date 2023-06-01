@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/createUser.dto';
 import * as bcrypt from 'bcrypt';
 import { validate } from 'class-validator';
+import { UpdateUserDto } from './dto/updateUser.dto';
 
 @Injectable()
 export class UsersService {
@@ -52,8 +53,30 @@ export class UsersService {
     return user;
   }
 
-  update(id) {
-    return `This action updates a users #${id}`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    
+    // Gestion de l'erreur si pas d'id
+    const user = await this.usersRepository.findOneBy({id})
+    if (!user) {
+      throw new BadRequestException()
+    }
+
+    if (updateUserDto.password) {
+      this.hashPassword(updateUserDto.password)
+    }
+
+    // Update de mon user
+    this.usersRepository.update({
+      id
+    }, updateUserDto)
+    
+
+    return {
+      status: 'updated',
+      data: updateUserDto
+    }
+
+
   }
 
   remove(id) {
