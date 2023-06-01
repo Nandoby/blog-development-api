@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsEmail,
   IsNotEmpty,
   IsOptional,
@@ -23,4 +24,9 @@ export class CreateUserDto {
     message: 'Le password ne peut être vide',
   })
   password: string;
+  
+  @IsArray()
+  @IsOptional()
+  roles: string[]
+  
 }

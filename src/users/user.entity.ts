@@ -2,7 +2,6 @@ import {
   BeforeInsert,
   Column,
   Entity,
-  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -32,7 +31,7 @@ export class User {
     type: 'simple-array',
     nullable: true,
   })
-  role: string[]
+  roles: string[]
 
   @OneToMany(() => Article, (article: Article) => article.user)
   articles: Article[];
@@ -42,7 +41,7 @@ export class User {
   
   @BeforeInsert()
   defaultUser() {
-    this.role = ['user']
+    this.roles = ['user']
   }
 
 }
