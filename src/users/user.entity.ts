@@ -1,4 +1,5 @@
 import {
+  BeforeInsert,
   Column,
   Entity,
   ManyToMany,
@@ -7,7 +8,6 @@ import {
 } from 'typeorm';
 import { Article } from '../articles/article.entity';
 import { Comment } from '../comments/comment.entity';
-import { Role } from '../roles/role.entity';
 
 @Entity()
 export class User {
@@ -28,12 +28,21 @@ export class User {
   @Column()
   password: string;
 
+  @Column({
+    type: 'simple-array',
+    nullable: true,
+  })
+  role: string[]
+
   @OneToMany(() => Article, (article: Article) => article.user)
   articles: Article[];
 
   @OneToMany(() => Comment, (comment: Comment) => comment.user)
   comments: Comment[];
+  
+  @BeforeInsert()
+  defaultUser() {
+    this.role = ['user']
+  }
 
-  @ManyToMany(() => Role, (role: Role) => role.users)
-  roles: Role[];
 }
