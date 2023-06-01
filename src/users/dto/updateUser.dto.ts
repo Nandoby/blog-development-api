@@ -12,6 +12,8 @@ export class UpdateUserDto {
     email: string 
 
     @IsString()
+    @IsOptional()
+    @IsNotEmpty()
     picture: string
 
     @IsString()
