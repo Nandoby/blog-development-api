@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -54,33 +55,43 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    
     // Gestion de l'erreur si pas d'id
-    const user = await this.usersRepository.findOneBy({id})
+    const user = await this.usersRepository.findOneBy({ id });
     if (!user) {
-      throw new BadRequestException()
+      throw new BadRequestException();
     }
 
     if (updateUserDto.password) {
-      this.hashPassword(updateUserDto.password)
+      this.hashPassword(updateUserDto.password);
     }
 
     // Update de mon user
-    this.usersRepository.update({
-      id
-    }, updateUserDto)
-    
+    this.usersRepository.update(
+      {
+        id,
+      },
+      updateUserDto,
+    );
 
     return {
-      status: 'updated',
-      data: updateUserDto
-    }
-
-
+      status: HttpStatus.OK,
+      data: updateUserDto,
+    };
   }
 
-  remove(id) {
-    return `This action removes a users #${id}`;
+  async remove(id) {
+    const user = await this.usersRepository.findOneBy({ id });
+    if (!user) {
+      throw new BadRequestException()
+    }
+    this.usersRepository.delete({
+      id
+    })
+
+    return {
+      status: HttpStatus.OK
+    }
+    
   }
 
   async emailAlreadyExists(user) {
