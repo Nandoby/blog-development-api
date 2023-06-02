@@ -23,8 +23,8 @@ export class ArticlesController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updatedArticle: UpdateArticleDto) {
-    return this.articlesService.update(id, updatedArticle);
+  async update(@Param('id') id: string, @Body() updatedArticle: UpdateArticleDto) {
+    return await this.articlesService.update(id, updatedArticle);
   }
 
   @Delete(':id')

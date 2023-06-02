@@ -56,11 +56,16 @@ export class ArticlesService {
     })
     if (!article) throw new NotFoundException(`Aucun article trouvé avec cet id`)
 
-    const { categories } = updatedArticle
+    const category = await this.categoryRepository.findBy(updatedArticle.categories)
 
-    const categoryId = await this.categoryRepository.findBy(categories)
+    if (!category.length) throw new NotFoundException('Aucune catégorie ne correspond a cet id')
 
-    if (!categoryId.length) throw new NotFoundException('Aucune catégorie ne correspond a cet id')
+    article.title = updatedArticle.title 
+    article.content = updatedArticle.content
+    article.coverImage = updatedArticle.coverImage
+    article.categories = category
+
+    return await this.articleRepository.save(article)
     
   } 
 
