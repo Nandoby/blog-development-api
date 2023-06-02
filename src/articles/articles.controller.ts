@@ -1,18 +1,19 @@
-import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
+import { CreateArticleDto } from './dto/createArticle.dto';
 
 @Controller('articles')
 export class ArticlesController {
   constructor(private articlesService: ArticlesService) {}
 
   @Get()
-  findAll() {
-    return this.articlesService.findAll();
+  async findAll() {
+    return await this.articlesService.findAll();
   }
 
   @Post()
-  create() {
-    return this.articlesService.create();
+  create(@Body() createArticleDto: CreateArticleDto) {
+    return this.articlesService.create(createArticleDto);
   }
 
   @Get(':id')
