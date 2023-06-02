@@ -24,8 +24,8 @@ export class UsersService {
     return bcrypt.hash(password, saltOrRounds);
   }
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  async findAll(): Promise<User[]> {
+    return await this.usersRepository.find();
   }
 
   async create(createUserDto: CreateUserDto) {

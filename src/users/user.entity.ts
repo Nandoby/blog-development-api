@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Article } from '../articles/article.entity';
 import { Comment } from '../comments/comment.entity';
+import { Exclude, Expose } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -25,6 +26,7 @@ export class User {
   picture: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column({
