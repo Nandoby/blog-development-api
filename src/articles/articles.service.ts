@@ -23,23 +23,27 @@ export class ArticlesService {
   }
 
   async create(createArticleDto: CreateArticleDto) {
+    const { title, content, coverImage } = createArticleDto;
 
-    const { title, content, coverImage } = createArticleDto
+    const article = new Article();
+    article.title = title;
+    article.content = content;
+    if (coverImage) article.coverImage = coverImage;
 
-    const article = new Article()
-    article.title = title
-    article.content = content 
-    if (coverImage) article.coverImage = coverImage
+    const categories = await this.categoryRepository.findBy(
+      createArticleDto.categories,
+    );
 
-    const categories = await this.categoryRepository.findBy(createArticleDto.categories)
+    article.categories = categories;
 
-    article.categories = categories
-
-    return this.articleRepository.save(article)
+    return this.articleRepository.save(article);
   }
 
-  findOne(id) {
-    return `This action returns a article #${id}`;
+  async findOne(id) {
+    const article = await this.articleRepository.findOneBy({ id });
+    if (!article) throw new BadRequestException(`Aucune article n'a été trouvée ayant l'id ${id}`)
+    return article
+    
   }
 
   update(id) {
