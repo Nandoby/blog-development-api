@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from './article.entity';
 import { Repository } from 'typeorm';
 import { CreateArticleDto } from './dto/createArticle.dto';
 import { Category } from 'src/categories/category.entity';
+import { UpdateArticleDto } from './dto/updateArticle.dto';
 
 @Injectable()
 export class ArticlesService {
@@ -46,11 +47,25 @@ export class ArticlesService {
     
   }
 
-  update(id) {
-    return `This action updates a article #${id}`;
-  }
+  async update(id, updatedArticle: UpdateArticleDto) {
+    const article = await this.articleRepository.findOne({
+      where: { id },
+      relations: {
+        categories: true
+      }
+    })
+    if (!article) throw new NotFoundException(`Aucun article trouvé avec cet id`)
+
+    const { categories } = updatedArticle
+
+    const categoryId = await this.categoryRepository.findBy(categories)
+
+    if (!categoryId.length) throw new NotFoundException('Aucune catégorie ne correspond a cet id')
+    
+  } 
 
   remove(id) {
     return `This action removes a article #${id}`;
   }
+  
 }
