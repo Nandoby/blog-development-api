@@ -69,8 +69,10 @@ export class ArticlesService {
     
   } 
 
-  remove(id) {
-    return `This action removes a article #${id}`;
+  async remove(id) {
+    const article = await this.articleRepository.findOneBy({id})
+    if (!article) throw new NotFoundException('Aucun article trouvé')
+    await this.articleRepository.remove(article)
   }
   
 }
