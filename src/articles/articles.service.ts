@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateArticleDto } from './dto/createArticle.dto';
 import { Category } from 'src/categories/category.entity';
 import { UpdateArticleDto } from './dto/updateArticle.dto';
+import { User } from 'src/users/user.entity';
 
 @Injectable()
 export class ArticlesService {
@@ -13,6 +14,8 @@ export class ArticlesService {
     private articleRepository: Repository<Article>,
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>
   ) {}
 
   async findAll() {
@@ -23,9 +26,10 @@ export class ArticlesService {
     });
   }
 
-  async create(createArticleDto: CreateArticleDto) {
+  async create(createArticleDto: CreateArticleDto, userRequest) {
     const { title, content, coverImage } = createArticleDto;
 
+    const user = await this.userRepository.findOneBy({ id: userRequest.sub})
     const article = new Article();
     article.title = title;
     article.content = content;
@@ -36,6 +40,8 @@ export class ArticlesService {
     );
 
     article.categories = categories;
+
+    article.user = user
 
     return this.articleRepository.save(article);
   }
