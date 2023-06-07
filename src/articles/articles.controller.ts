@@ -4,7 +4,6 @@ import { CreateArticleDto } from './dto/createArticle.dto';
 import { UpdateArticleDto } from './dto/updateArticle.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AddCommentDto } from './dto/addComment.dto';
-import { UserRequest } from 'src/interfaces/userRequest.interface';
 
 @Controller('articles')
 export class ArticlesController {
@@ -20,7 +19,7 @@ export class ArticlesController {
   create(@Body() createArticleDto: CreateArticleDto, @Request() req) {
     return this.articlesService.create(createArticleDto, req.user);
   }
-
+  
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.articlesService.findOne(id);
