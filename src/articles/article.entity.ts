@@ -27,7 +27,9 @@ export class Article {
   @Column({ default: 'default-cover.png' })
   coverImage: string;
 
-  @ManyToOne(() => User, (user) => user.articles)
+  @ManyToOne(() => User, (user) => user.articles, {
+    onDelete: 'CASCADE'
+  })
   user: User;
 
   @OneToMany(() => Comment, (comment) => comment.article)
