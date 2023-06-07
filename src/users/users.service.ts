@@ -82,16 +82,15 @@ export class UsersService {
   async remove(id) {
     const user = await this.usersRepository.findOneBy({ id });
     if (!user) {
-      throw new BadRequestException()
+      throw new BadRequestException();
     }
     this.usersRepository.delete({
-      id
-    })
+      id,
+    });
 
     return {
-      status: HttpStatus.OK
-    }
-    
+      status: HttpStatus.OK,
+    };
   }
 
   async emailAlreadyExists(user) {
@@ -99,5 +98,11 @@ export class UsersService {
       email: user.email,
     });
     return !!email;
+  }
+
+  async findByUsername(username: string) {
+    const user = await this.usersRepository.findOneBy({ username });
+    if (!user) throw new NotFoundException("Cet utilisateur n'existe pas")
+    return user
   }
 }
