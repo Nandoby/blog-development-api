@@ -4,8 +4,11 @@ import { Article } from './article.entity';
 import { Repository } from 'typeorm';
 import { CreateArticleDto } from './dto/createArticle.dto';
 import { Category } from 'src/categories/category.entity';
+import { Comment } from 'src/comments/comment.entity';
 import { UpdateArticleDto } from './dto/updateArticle.dto';
 import { User } from 'src/users/user.entity';
+import { AddCommentDto } from './dto/addComment.dto';
+import { UserRequest } from 'src/interfaces/userRequest.interface';
 
 @Injectable()
 export class ArticlesService {
@@ -15,13 +18,16 @@ export class ArticlesService {
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
     @InjectRepository(User)
-    private userRepository: Repository<User>
+    private userRepository: Repository<User>,
+    @InjectRepository(Comment)
+    private commentRepository: Repository<Comment>
   ) {}
 
   async findAll() {
     return await this.articleRepository.find({
       relations: {
         categories: true,
+        user: true,
       },
     });
   }
@@ -79,6 +85,20 @@ export class ArticlesService {
     const article = await this.articleRepository.findOneBy({id})
     if (!article) throw new NotFoundException('Aucun article trouvé')
     await this.articleRepository.remove(article)
+  }
+
+  // Sub-Resources : Comments
+
+  async addComment(id, addComment: AddCommentDto, userRequest: UserRequest) {
+    const article = await this.findOne(id)
+    const user = await this.userRepository.findOneBy({ id: userRequest.sub })
+    if (!user) throw new NotFoundException('Aucun utilisateur trouvé')
+    if (!article) throw new NotFoundException('Aucun article trouvé')
+    const comment = new Comment()
+    comment.article = article 
+    comment.user = user 
+    comment.content = addComment.content
+    return await this.commentRepository.save(comment)
   }
   
 }

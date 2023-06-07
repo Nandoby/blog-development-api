@@ -3,6 +3,8 @@ import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/createArticle.dto';
 import { UpdateArticleDto } from './dto/updateArticle.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { AddCommentDto } from './dto/addComment.dto';
+import { UserRequest } from 'src/interfaces/userRequest.interface';
 
 @Controller('articles')
 export class ArticlesController {
@@ -34,5 +36,13 @@ export class ArticlesController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     await this.articlesService.remove(id);
+  }
+
+  // Sub-Resource : Comments 
+
+  @UseGuards(AuthGuard)
+  @Post(':id/comments')
+  async addComment(@Param('id') id, @Body() addComment: AddCommentDto, @Request() req) {
+     return this.articlesService.addComment(id, addComment, req.user)
   }
 }
