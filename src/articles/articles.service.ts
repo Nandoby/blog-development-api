@@ -28,6 +28,7 @@ export class ArticlesService {
       relations: {
         categories: true,
         user: true,
+        comments: true
       },
     });
   }
