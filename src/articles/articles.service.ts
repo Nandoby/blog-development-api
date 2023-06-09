@@ -54,7 +54,12 @@ export class ArticlesService {
   }
 
   async findOne(id) {
-    const article = await this.articleRepository.findOneBy({ id });
+    const article = await this.articleRepository.findOne({ 
+      where: { id },
+      relations: {
+        user: true
+      }
+     });
     if (!article) throw new BadRequestException(`Aucune article n'a été trouvée ayant l'id ${id}`)
     return article
     

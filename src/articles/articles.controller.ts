@@ -4,6 +4,7 @@ import { CreateArticleDto } from './dto/createArticle.dto';
 import { UpdateArticleDto } from './dto/updateArticle.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AddCommentDto } from './dto/addComment.dto';
+import { ArticlesOwnerGuard } from 'src/guards/articlesOwner.guard';
 
 @Controller('articles')
 export class ArticlesController {
@@ -25,13 +26,13 @@ export class ArticlesController {
     return this.articlesService.findOne(id);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, ArticlesOwnerGuard)
   @Put(':id')
   async update(@Param('id') id: string, @Body() updatedArticle: UpdateArticleDto) {
     return await this.articlesService.update(id, updatedArticle);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, ArticlesOwnerGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     await this.articlesService.remove(id);
