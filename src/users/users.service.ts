@@ -100,8 +100,8 @@ export class UsersService {
     return !!email;
   }
 
-  async findByUsername(username: string) {
-    const user = await this.usersRepository.findOneBy({ username });
+  async findByEmail(email: string) {
+    const user = await this.usersRepository.findOneBy({ email });
     if (!user) throw new NotFoundException("Cet utilisateur n'existe pas")
     return user
   }

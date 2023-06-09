@@ -12,7 +12,8 @@ export class ArticlesController {
 
   @Get()
   async findAll() {
-    return await this.articlesService.findAll();
+    const articles = await this.articlesService.findAll();
+    return { articles }
   }
 
   @UseGuards(AuthGuard)
