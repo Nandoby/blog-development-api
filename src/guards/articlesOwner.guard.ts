@@ -13,7 +13,7 @@ export class ArticlesOwnerGuard implements CanActivate {
     const article = await this.articleService.findOne(articleId)
 
 
-    if (article && article.user.id === user.sub) {
+    if (article && article.user && article.user.id === user.sub) {
         return true
     }
 
