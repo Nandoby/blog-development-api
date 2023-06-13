@@ -25,11 +25,7 @@ export class ArticlesService {
 
   async findAll() {
     return await this.articleRepository.find({
-      relations: {
-        categories: true,
-        user: true,
-        comments: true
-      },
+      relations: ['categories', 'user', 'comments.user']
     });
   }
 
