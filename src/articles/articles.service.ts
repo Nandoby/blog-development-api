@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from './article.entity';
 import { Repository } from 'typeorm';
@@ -20,19 +24,19 @@ export class ArticlesService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     @InjectRepository(Comment)
-    private commentRepository: Repository<Comment>
+    private commentRepository: Repository<Comment>,
   ) {}
 
   async findAll() {
     return await this.articleRepository.find({
-      relations: ['categories', 'user', 'comments.user']
+      relations: ['categories', 'user', 'comments.user'],
     });
   }
 
   async create(createArticleDto: CreateArticleDto, userRequest) {
     const { title, content, coverImage } = createArticleDto;
 
-    const user = await this.userRepository.findOneBy({ id: userRequest.sub})
+    const user = await this.userRepository.findOneBy({ id: userRequest.sub });
     const article = new Article();
     article.title = title;
     article.content = content;
@@ -44,63 +48,78 @@ export class ArticlesService {
 
     article.categories = categories;
 
-    article.user = user
+    article.user = user;
 
     return this.articleRepository.save(article);
   }
 
   async findOne(id) {
-    const article = await this.articleRepository.findOne({ 
+    const article = await this.articleRepository.findOne({
       where: { id },
       relations: {
-        user: true
-      }
-     });
-    if (!article) throw new BadRequestException(`Aucune article n'a été trouvée ayant l'id ${id}`)
-    return article
-    
+        user: true,
+      },
+    });
+    if (!article)
+      throw new BadRequestException(
+        `Aucune article n'a été trouvée ayant l'id ${id}`,
+      );
+    return article;
   }
 
   async update(id, updatedArticle: UpdateArticleDto) {
     const article = await this.articleRepository.findOne({
       where: { id },
       relations: {
-        categories: true
-      }
-    })
-    if (!article) throw new NotFoundException(`Aucun article trouvé avec cet id`)
+        categories: true,
+      },
+    });
+    if (!article)
+      throw new NotFoundException(`Aucun article trouvé avec cet id`);
 
-    const category = await this.categoryRepository.findBy(updatedArticle.categories)
+    const category = await this.categoryRepository.findBy(
+      updatedArticle.categories,
+    );
 
-    if (!category.length) throw new NotFoundException('Aucune catégorie ne correspond a cet id')
+    if (!category.length)
+      throw new NotFoundException('Aucune catégorie ne correspond a cet id');
 
-    article.title = updatedArticle.title 
-    article.content = updatedArticle.content
-    article.coverImage = updatedArticle.coverImage
-    article.categories = category
+    article.title = updatedArticle.title;
+    article.content = updatedArticle.content;
+    article.coverImage = updatedArticle.coverImage;
+    article.categories = category;
 
-    return await this.articleRepository.save(article)
-    
-  } 
+    return await this.articleRepository.save(article);
+  }
 
   async remove(id) {
-    const article = await this.articleRepository.findOneBy({id})
-    if (!article) throw new NotFoundException('Aucun article trouvé')
-    await this.articleRepository.remove(article)
+    const article = await this.articleRepository.findOneBy({ id });
+    if (!article) throw new NotFoundException('Aucun article trouvé');
+    await this.articleRepository.remove(article);
   }
 
   // Sub-Resources : Comments
 
   async addComment(id, addComment: AddCommentDto, userRequest: UserRequest) {
-    const article = await this.findOne(id)
-    const user = await this.userRepository.findOneBy({ id: userRequest.sub })
-    if (!user) throw new NotFoundException('Aucun utilisateur trouvé')
-    if (!article) throw new NotFoundException('Aucun article trouvé')
-    const comment = new Comment()
-    comment.article = article 
-    comment.user = user 
-    comment.content = addComment.content
-    return await this.commentRepository.save(comment)
+    const article = await this.findOne(id);
+    const user = await this.userRepository.findOneBy({ id: userRequest.sub });
+    if (!user) throw new NotFoundException('Aucun utilisateur trouvé');
+    if (!article) throw new NotFoundException('Aucun article trouvé');
+    const comment = new Comment();
+    comment.article = article;
+    comment.user = user;
+    comment.content = addComment.content;
+    return await this.commentRepository.save(comment);
   }
-  
+
+  async search(search: string) {
+    const query = await this.articleRepository
+      .createQueryBuilder('article')
+      .leftJoinAndSelect('article.categories', 'category')
+      .where('category.name LIKE :search OR article.title LIKE :search', {
+        search: `%${search}%`,
+      });
+
+    return await query.getMany();
+  }
 }

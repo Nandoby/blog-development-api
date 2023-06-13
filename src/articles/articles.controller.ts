@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Request } from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Request, ParseIntPipe, Query} from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/createArticle.dto';
 import { UpdateArticleDto } from './dto/updateArticle.dto';
@@ -21,9 +21,14 @@ export class ArticlesController {
   create(@Body() createArticleDto: CreateArticleDto, @Request() req) {
     return this.articlesService.create(createArticleDto, req.user);
   }
+
+  @Get('search')
+  async search(@Query('q') query: string, @Query('title') title: string) {
+    return this.articlesService.search(query)
+  }
   
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.articlesService.findOne(id);
   }
 
