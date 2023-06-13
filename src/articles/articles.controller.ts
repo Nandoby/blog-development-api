@@ -5,7 +5,9 @@ import { UpdateArticleDto } from './dto/updateArticle.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AddCommentDto } from './dto/addComment.dto';
 import { ArticlesOwnerGuard } from 'src/guards/articlesOwner.guard';
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('Articles')
 @Controller('articles')
 export class ArticlesController {
   constructor(private articlesService: ArticlesService) {}

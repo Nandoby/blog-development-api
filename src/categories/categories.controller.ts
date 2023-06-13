@@ -5,7 +5,9 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { CreateCategoryDto } from './dto/createCategory.dto';
 import { UpdateCategoryDto } from './dto/updateCategory.dto';
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('Categories - Admin')
 @UseGuards(AuthGuard, RolesGuard)
 @Roles('Admin')
 @Controller('categories')
