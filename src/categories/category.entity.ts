@@ -1,8 +1,9 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Article } from '../articles/article.entity';
 
 @Entity()
 export class Category {
+
   @PrimaryGeneratedColumn()
   id: number;
 

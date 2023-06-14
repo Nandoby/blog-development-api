@@ -116,20 +116,18 @@ export class ArticlesService {
     const query = await this.articleRepository
       .createQueryBuilder('article')
       .leftJoinAndSelect('article.categories', 'category')
+      .leftJoinAndSelect('article.user', 'user')
+        .leftJoinAndSelect('article.comments', 'comments')
       .where('category.name LIKE :search OR article.title LIKE :search', {
         search: `%${search}%`,
       });
 
-    const result = await query.getMany()
+    const result = await query.getMany();
 
     if (result.length) {
-      return await query.getMany()
+      return await query.getMany();
     } else {
-      // return await this.articleRepository.find({
-      //   relations: ['categories', 'user', 'comments', 'comments.user']
-      // })
-      throw new NotFoundException()
+      throw new NotFoundException();
     }
-
   }
 }

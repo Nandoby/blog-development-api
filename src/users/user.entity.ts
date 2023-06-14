@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { Article } from '../articles/article.entity';
 import { Comment } from '../comments/comment.entity';
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -33,17 +33,16 @@ export class User {
     type: 'simple-array',
     nullable: true,
   })
-  roles: string[]
+  roles: string[];
 
   @OneToMany(() => Article, (article: Article) => article.user)
   articles: Article[];
 
   @OneToMany(() => Comment, (comment: Comment) => comment.user)
   comments: Comment[];
-  
+
   @BeforeInsert()
   defaultUser() {
-    this.roles = ['user']
+    this.roles = ['user'];
   }
-
 }

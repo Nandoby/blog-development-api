@@ -6,25 +6,31 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 class CategoryObject {
-    @IsNotEmpty()
-    id: number
+  @ApiProperty()
+  @IsNotEmpty()
+  id: number;
 }
 
 export class UpdateArticleDto {
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   title: string;
 
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   content: string;
 
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   coverImage: string;
 
+  @ApiProperty()
   @IsArray()
   @ValidateNested({ each: true })
   @ArrayMinSize(1)

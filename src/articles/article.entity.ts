@@ -28,7 +28,7 @@ export class Article {
   coverImage: string;
 
   @ManyToOne(() => User, (user) => user.articles, {
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   })
   user: User;
 

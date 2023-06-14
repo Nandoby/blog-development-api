@@ -13,7 +13,10 @@ export class CategoriesService {
   ) { }
 
   async findAll() {
-    return this.categoryRepository.find()
+    return this.categoryRepository.find({
+      order: { name: "ASC" },
+      relations: ['articles', 'articles.user', 'articles.comments']
+    })
   }
 
   async create(createCategoryDto: CreateCategoryDto) {

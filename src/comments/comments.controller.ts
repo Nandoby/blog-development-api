@@ -11,9 +11,10 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UpdateCommentDto } from './dto/updateComment.dto';
-import {ApiTags} from "@nestjs/swagger";
+import {ApiBearerAuth, ApiOkResponse, ApiTags, ApiUnauthorizedResponse} from "@nestjs/swagger";
 
 @ApiTags('Commentaires - Admin')
+@ApiBearerAuth()
 @UseGuards(AuthGuard, RolesGuard)
 @Roles('Admin')
 @Controller('comments')
@@ -21,9 +22,12 @@ export class CommentsController {
   constructor(private commentService: CommentsService) {}
 
   @Get()
+  @ApiOkResponse({ description: 'Get all comments'})
+  @ApiUnauthorizedResponse({ description: 'You need to log in to access the resource'})
   findAll() {
     return this.commentService.findAll();
   }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {
