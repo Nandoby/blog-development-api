@@ -5,11 +5,18 @@ import { UpdateArticleDto } from './dto/updateArticle.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AddCommentDto } from './dto/addComment.dto';
 import { ArticlesOwnerGuard } from 'src/guards/articlesOwner.guard';
-import {ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiQuery,
+  ApiResponse,
+  ApiTags
+} from "@nestjs/swagger";
 import {Article} from "./article.entity";
 
 @ApiTags('Articles')
-@Controller('api/articles')
+@Controller('articles')
 export class ArticlesController {
   constructor(private articlesService: ArticlesService) {}
 
@@ -21,7 +28,8 @@ export class ArticlesController {
   }
 
   @ApiBearerAuth()
-  @ApiResponse({ status: 201, type: [Article]})
+  @ApiCreatedResponse({ description: 'The record has been successfully created', type: Article })
+  @ApiBadRequestResponse({ description: 'Bad Request' })
   @UseGuards(AuthGuard)
   @Post()
   create(@Body() createArticleDto: CreateArticleDto, @Request() req) {

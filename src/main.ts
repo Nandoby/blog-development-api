@@ -13,16 +13,19 @@ async function bootstrap() {
     .addTag('blog')
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
-
-  // app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       transform: true,
     }),
   );
+
+  const document = SwaggerModule.createDocument(app, config, {
+    ignoreGlobalPrefix: false,
+  });
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(3000);
 }
 

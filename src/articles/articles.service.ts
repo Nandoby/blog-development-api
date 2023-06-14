@@ -125,9 +125,10 @@ export class ArticlesService {
     if (result.length) {
       return await query.getMany()
     } else {
-      return await this.articleRepository.find({
-        relations: ['categories', 'user', 'comments', 'comments.user']
-      })
+      // return await this.articleRepository.find({
+      //   relations: ['categories', 'user', 'comments', 'comments.user']
+      // })
+      throw new NotFoundException()
     }
 
   }
