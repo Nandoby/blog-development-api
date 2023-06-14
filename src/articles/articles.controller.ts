@@ -5,27 +5,33 @@ import { UpdateArticleDto } from './dto/updateArticle.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AddCommentDto } from './dto/addComment.dto';
 import { ArticlesOwnerGuard } from 'src/guards/articlesOwner.guard';
-import {ApiTags} from "@nestjs/swagger";
+import {ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {Article} from "./article.entity";
 
 @ApiTags('Articles')
-@Controller('articles')
+@Controller('api/articles')
 export class ArticlesController {
   constructor(private articlesService: ArticlesService) {}
 
+  @ApiResponse({ status: 200, type: [Article] })
   @Get()
   async findAll() {
     const articles = await this.articlesService.findAll();
     return { articles }
   }
 
+  @ApiBearerAuth()
+  @ApiResponse({ status: 201, type: [Article]})
   @UseGuards(AuthGuard)
   @Post()
   create(@Body() createArticleDto: CreateArticleDto, @Request() req) {
     return this.articlesService.create(createArticleDto, req.user);
   }
 
+  @ApiResponse( { status: 200, type: [Article]})
+  @ApiQuery({ name: 'q', required: false })
   @Get('search')
-  async search(@Query('q') query: string, @Query('title') title: string) {
+  async search(@Query('q') query: string) {
     return this.articlesService.search(query)
   }
   

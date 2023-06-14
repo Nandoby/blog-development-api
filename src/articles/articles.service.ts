@@ -120,6 +120,15 @@ export class ArticlesService {
         search: `%${search}%`,
       });
 
-    return await query.getMany();
+    const result = await query.getMany()
+
+    if (result.length) {
+      return await query.getMany()
+    } else {
+      return await this.articleRepository.find({
+        relations: ['categories', 'user', 'comments', 'comments.user']
+      })
+    }
+
   }
 }
