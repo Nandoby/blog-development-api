@@ -27,7 +27,21 @@ export class ArticlesService {
     private commentRepository: Repository<Comment>,
   ) {}
 
-  async findAll() {
+  async findAll(query) {
+
+    // Get 3 last articles
+    if (query.lastArticles) {
+      
+      const lastArticles = Number(query.lastArticles)
+
+      return await this.articleRepository.find({
+        order: {
+          id: { direction: 'DESC'}
+        },
+        take: lastArticles
+      })
+    }
+
     return await this.articleRepository.find({
       relations: ['categories', 'user', 'comments.user'],
     });

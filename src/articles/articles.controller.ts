@@ -35,8 +35,8 @@ export class ArticlesController {
 
   @ApiOkResponse({ description: 'Return all articles', type: [Article] })
   @Get()
-  async findAll() {
-    return await this.articlesService.findAll();
+  async findAll(@Query() query: string) {
+    return await this.articlesService.findAll(query);
   }
 
   @ApiBearerAuth()
