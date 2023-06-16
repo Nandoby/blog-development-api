@@ -35,7 +35,7 @@ export class ArticlesController {
 
   @ApiOkResponse({ description: 'Return all articles', type: [Article] })
   @Get()
-  async findAll(@Query() query: string) {
+  async findAll(@Query() query) {
     return await this.articlesService.findAll(query);
   }
 
