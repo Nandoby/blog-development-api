@@ -28,18 +28,17 @@ export class ArticlesService {
   ) {}
 
   async findAll(query) {
-
     // Get 3 last articles
     if (query.lastArticles) {
-      
-      const lastArticles = Number(query.lastArticles)
+      const lastArticles = Number(query.lastArticles);
 
       return await this.articleRepository.find({
         order: {
-          id: { direction: 'DESC'}
+          id: { direction: 'DESC' },
         },
-        take: lastArticles
-      })
+        take: lastArticles,
+        relations: ['categories', 'user', 'comments.user'],
+      });
     }
 
     return await this.articleRepository.find({
@@ -131,7 +130,7 @@ export class ArticlesService {
       .createQueryBuilder('article')
       .leftJoinAndSelect('article.categories', 'category')
       .leftJoinAndSelect('article.user', 'user')
-        .leftJoinAndSelect('article.comments', 'comments')
+      .leftJoinAndSelect('article.comments', 'comments')
       .where('category.name LIKE :search OR article.title LIKE :search', {
         search: `%${search}%`,
       });
