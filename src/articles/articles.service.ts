@@ -69,9 +69,7 @@ export class ArticlesService {
   async findOne(id) {
     const article = await this.articleRepository.findOne({
       where: { id },
-      relations: {
-        user: true,
-      },
+      relations: ['user', 'categories', 'comments', 'comments.user']
     });
     if (!article)
       throw new BadRequestException(
