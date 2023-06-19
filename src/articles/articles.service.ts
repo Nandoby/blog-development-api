@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from './article.entity';
-import { Repository } from 'typeorm';
+import { FindOperator, Repository } from 'typeorm';
 import { CreateArticleDto } from './dto/createArticle.dto';
 import { Category } from 'src/categories/category.entity';
 import { Comment } from 'src/comments/comment.entity';
@@ -76,6 +76,17 @@ export class ArticlesService {
         `Aucune article n'a été trouvée ayant l'id ${id}`,
       );
     return article;
+  }
+
+  async findByCategory(categoryId: number) {
+    const category = await this.categoryRepository.findOne({
+      where: { id: categoryId },
+      relations: ["articles"]
+    })
+    if (!category) {
+      throw new NotFoundException('Aucune catégorie trouvée')
+    }
+    return category.articles
   }
 
   async update(id, updatedArticle: UpdateArticleDto) {

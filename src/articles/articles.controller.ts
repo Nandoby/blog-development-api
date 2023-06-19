@@ -64,6 +64,11 @@ export class ArticlesController {
     return this.articlesService.findOne(id);
   }
 
+  @Get('/categories/:id')
+  async findArticleByCategory(@Param('id', ParseIntPipe) categoryId: number) {
+    return this.articlesService.findByCategory(categoryId)
+  }
+
   @ApiBearerAuth()
   @ApiOkResponse({ type: Article })
   @ApiUnauthorizedResponse({ description: 'Unauthorized ' })
