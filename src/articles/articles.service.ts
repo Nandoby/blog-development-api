@@ -81,7 +81,7 @@ export class ArticlesService {
   async findByCategory(categoryId: number) {
     const category = await this.categoryRepository.findOne({
       where: { id: categoryId },
-      relations: ["articles"]
+      relations: ["articles", "articles.comments", "articles.user"]
     })
     if (!category) {
       throw new NotFoundException('Aucune catégorie trouvée')
