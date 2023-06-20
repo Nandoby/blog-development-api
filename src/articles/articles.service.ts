@@ -146,10 +146,6 @@ export class ArticlesService {
 
     const result = await query.getMany();
 
-    if (result.length) {
-      return await query.getMany();
-    } else {
-      throw new NotFoundException();
-    }
+    return await query.getMany();
   }
 }
