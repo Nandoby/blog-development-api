@@ -26,7 +26,8 @@ export class AuthService {
     if (loggedIn) {
       const payload = { sub: user.id, username: user.username, roles: user.roles }
       return {
-        access_token: await this.jwtService.signAsync(payload)
+        access_token: await this.jwtService.signAsync(payload),
+        user
       }
     } else {
       throw new UnauthorizedException();
