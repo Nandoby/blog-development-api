@@ -106,4 +106,9 @@ export class ArticlesController {
   async previousArticle(@Param('id') id) {
     return this.articlesService.previousArticle(id)
   }
+
+  @Get(":id/next")
+  async nextArticle(@Param('id') id) {
+    return this.articlesService.nextArticle(id)
+  }
 }

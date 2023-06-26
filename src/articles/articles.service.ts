@@ -158,4 +158,14 @@ export class ArticlesService {
     
     return previous
   }
+
+  async nextArticle(id) {
+    const next = await this.articleRepository
+      .createQueryBuilder()
+      .where('id > :id', { id })
+      .orderBy('id', 'ASC')
+      .getOne();
+    
+    return next
+  }
 }
