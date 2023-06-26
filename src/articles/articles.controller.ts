@@ -101,4 +101,9 @@ export class ArticlesController {
   ) {
     return this.articlesService.addComment(id, addComment, req.user);
   }
+
+  @Get(":id/prev")
+  async previousArticle(@Param('id') id) {
+    return this.articlesService.previousArticle(id)
+  }
 }
