@@ -92,9 +92,7 @@ export class ArticlesService {
   async update(id, updatedArticle: UpdateArticleDto) {
     const article = await this.articleRepository.findOne({
       where: { id },
-      relations: {
-        categories: true,
-      },
+      relations: ['categories', 'user', 'comments', 'comments.user']
     });
     if (!article)
       throw new NotFoundException(`Aucun article trouvé avec cet id`);
