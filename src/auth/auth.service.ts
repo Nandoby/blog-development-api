@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { SignInDto } from './dto/signIn.dto';
@@ -36,6 +36,11 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     const { email, password, picture, username } = registerDto
+
+    const findUser = await this.userRepository.findBy({ email })
+
+    if (findUser.length) throw new HttpException('Cet email existe deja', HttpStatus.BAD_REQUEST)
+
     const user = new User()
     user.username = username
     user.email = email
